@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Love 🎀</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load GSAP and ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Load Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Load Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kitty-pink': '#FF85B2', // BRIGHTER PINK for more pop
+                        'kitty-red': '#FF69B4', // Hot Pink / Red Bow color
+                        'kitty-white': '#FFFFFF',
+                        'kitty-shadow': 'rgba(255, 105, 180, 0.5)',
+                        'kitty-bg': '#FFF9FB', // A slightly off-white for warmth
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'], // Upgraded Font
+                        cute: ['Nunito', 'cursive', 'sans-serif'], // Consistent cute font
+                    },
+                    boxShadow: {
+                        'kitty-glow': '0 0 20px 8px rgba(255, 105, 180, 0.7)',
+                        'kitty-subtle': '0 4px 15px rgba(255, 105, 180, 0.2)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styling with Subtle Background Pattern */
+        body {
+            background-color: theme('colors.kitty-bg');
+            color: #4A4A4A; /* A softer black for text */
+            font-family: theme('fontFamily.sans');
+            overflow-x: hidden;
+            background-image: radial-gradient(theme('colors.kitty-pink') 5%, transparent 0);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px; /* Creates a polka-dot like pattern */
+        }
+
+        /* Hello Kitty Bow Icon CSS (Used as an overlay/decoration) */
+        .kitty-bow {
+            position: absolute;
+            width: 50px;
+            height: 30px;
+            background-color: theme('colors.kitty-red');
+            border-radius: 5px;
+            z-index: 10;
+        }
+
+        .kitty-bow::before, .kitty-bow::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: theme('colors.kitty-red');
+            border-radius: 50%;
+            top: 0;
+        }
+        
+        .kitty-bow::before { left: -15px; }
+        .kitty-bow::after { right: -15px; }
+        .kitty-bow.small {
+            width: 30px;
+            height: 18px;
+        }
+        .kitty-bow.small::before, .kitty-bow.small::after {
+            width: 18px;
+            height: 18px;
+        }
+        .kitty-bow.small::before { left: -9px; }
+        .kitty-bow.small::after { right: -9px; }
+
+        /* Custom ScrollTrigger Styling */
+        .memory-track {
+            display: flex;
+        }
+        .memory-card {
+            width: calc(100vw - 4rem); /* Full viewport width minus padding/margin */
+            flex-shrink: 0;
+            padding: 2rem;
+        }
+        /* Game Styling */
+        #game-board {
+            cursor: pointer;
+            border: 4px solid theme('colors.kitty-red');
+            background-color: theme('colors.kitty-white');
+            box-shadow: 0 0 20px theme('colors.kitty-shadow');
+            border-radius: 1.5rem; /* Match container rounding */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Click to Enter Overlay -->
+    <div id="click-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-kitty-bg cursor-pointer transition-opacity duration-500">
+        <div class="text-center animate-pulse">
+            <h1 class="text-4xl font-bold text-kitty-red">A little surprise for you...</h1>
+            <p class="text-2xl mt-2 text-gray-500">(Click anywhere to open)</p>
+            <p class="text-6xl mt-4">🎀</p>
+        </div>
+    </div>
+
+    <!-- Background Music Player -->
+    <audio id="bg-music" loop>
+        <source src="/home/hodauwu/C/Anshika/bday-surprise/audio/feelz.m4a" type="audio/mp4">
+        Your browser does not support the audio element.
+    </audio>
+    <!-- Party Popper Sound Effect -->
+    <audio id="popper-sound">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjQwLjEwMQAAAAAAAAAAAAAA//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz//tAnxAAAAAAAAAAAAAAAAAAAAAAAAB9/z/8A9GM9/w/BTw8w/ALw/z/qfBSEgA0H//2f/wAAAA3D/+wA0A0NyAANw/ADQAAz/AAAAAAA=" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Control Button -->
+    <button id="music-toggle" class="fixed bottom-5 left-5 z-50 w-14 h-14 bg-kitty-red text-white rounded-full shadow-lg flex items-center justify-center transform hover:scale-110 transition-transform duration-300 opacity-0" style="visibility: hidden;">
+        <svg id="sound-on-icon" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
+        <svg id="sound-off-icon" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 14l-5-5m0 5l5-5" />
+        </svg>
+    </button>
+    
+    <!-- Main Container (Initially Hidden) -->
+    <div id="app-container" class="min-h-screen opacity-0" style="visibility: hidden;">
+
+        <!-- 1. HERO SECTION (Polished with Gradient) -->
+        <section id="hero" class="h-screen flex items-center justify-center text-center p-4 bg-gradient-to-br from-kitty-pink to-kitty-red">
+            <div class="space-y-6">
+                <div class="text-7xl md:text-9xl font-black text-white tracking-widest p-4 rounded-3xl bg-white/20 backdrop-blur-sm" id="hero-title" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.2);">
+                    <span class="inline-block" data-char="H">H</span>
+                    <span class="inline-block" data-char="A">A</span>
+                    <span class="inline-block" data-char="P">P</span>
+                    <span class="inline-block" data-char="P">P</span>
+                    <span class="inline-block" data-char="Y">Y</span>
+                </div>
+                <div class="text-4xl md:text-6xl font-bold text-kitty-red shadow-lg p-3 rounded-xl bg-kitty-white" id="hero-subtitle">
+                    Birthday Anshika :3 🎂
+                </div>
+                <p class="text-xl text-white font-semibold opacity-0 bg-black/20 p-3 rounded-lg mx-auto max-w-md" id="hero-message">
+                    I made this to remind you the beautiful time and love we had and shared over the years. Scroll to see some of our memories.
+                </p>
+            </div>
+            <!-- Decorative Bows -->
+            <div class="kitty-bow absolute top-10 left-10 transform -rotate-12"></div>
+            <div class="kitty-bow absolute bottom-10 right-10 transform rotate-45 small"></div>
+        </section>
+
+        <!-- 2. MEMORY LANE (GSAP Scroll-Pinning Horizontal Scroll) -->
+        <section id="memory-lane" class="relative">
+            <div class="sticky top-0 h-screen overflow-hidden flex items-center justify-start p-2 md:p-8">
+                <h2 class="absolute top-8 left-1/2 transform -translate-x-1/2 text-4xl font-black text-kitty-red z-30 opacity-0 bg-white/50 p-2 rounded-lg" id="memory-header">
+                    Our Digital Memory Lane :3
+                </h2>
+                <div class="memory-track p-4 md:p-8 space-x-8" id="memory-track">
+                    
+                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-pink/90 rounded-3xl shadow-kitty-subtle border border-white p-6 md:p-10 transform scale-90" data-index="0">
+                        <img src="/home/hodauwu/C/Anshika/bday-surprise/images/1.jpeg" alt="Memory 1" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Memory+Image+1'">
+                        <div class="text-left md:w-2/3">
+                            <h3 class="text-3xl font-bold text-white mb-2" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">Chapter 1: The First pic u sent me</h3>
+                            <p class="text-white text-lg font-medium">Remember that first late-night call where you asked me to yap about cars and we were so awkward in call back then. Look at us now..</p>
+                        </div>
+                    </div>
+                    
+                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-white rounded-3xl shadow-kitty-subtle border p-6 md:p-10 transform scale-90" data-index="1">
+                         <img src="/home/hodauwu/C/Anshika/bday-surprise/images/3.jpeg" alt="Memory 2" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FF69B4/FFC0CB?text=Memory+Image+2'">
+                        <div class="text-left md:w-2/3">
+                            <h3 class="text-3xl font-bold text-kitty-red mb-2">The Art Master & The Queen</h3>
+                            <p class="text-gray-700 text-lg">Our first art. All those hours we spent drawing and making cute art together and the games we played! I miss playing games and watching movies with you :(</p>
+                        </div>
+                    </div>
+                    
+                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-pink/90 rounded-3xl shadow-kitty-subtle border border-white p-6 md:p-10 transform scale-90" data-index="2">
+                         <img src="/home/hodauwu/C/Anshika/bday-surprise/images/4.jpeg" alt="Memory 3" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Memory+Image+3'">
+                        <div class="text-left md:w-2/3">
+                            <h3 class="text-3xl font-bold text-white mb-2" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">The Day I Finally Saw my baby :3</h3>
+                            <p class="text-white text-lg font-medium">This day will always be my favorite day in my whole life forever. I want to relive this day forever with youuu. My fav pic<3</p>
+                        </div>
+                    </div>
+
+                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-white rounded-3xl shadow-kitty-subtle border p-6 md:p-10 transform scale-90" data-index="3">
+                         <img src="https://placehold.co/300x450/FF69B4/FFC0CB?text=Future+Memory" alt="Memory 4" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FF69B4/FFC0CB?text=Memory+Image+4'">
+                        <div class="text-left md:w-2/3">
+                            <h3 class="text-3xl font-bold text-kitty-red mb-2">I love you</h3>
+                            <p class="text-gray-700 text-lg">I’m excited about our future, whatever it may be. All I know is that having you to talk to every day makes everything better. Happy Birthday anshu i love you! Now, try the game!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. INTERACTIVE GAME SECTION (Polished) -->
+        <section id="game-section" class="min-h-screen flex flex-col items-center justify-center p-4 py-16 bg-kitty-bg space-y-6">
+            <div class="text-center">
+                <h2 class="text-5xl font-black text-kitty-red mb-2">
+                    Birthday Game Time! 🎀
+                </h2>
+                <p class="text-xl text-gray-600 max-w-xl">
+                    How quickly can you tap the falling bows? Every hit is a wish for your amazing birthday!
+                </p>
+            </div>
+
+            <div class="w-full max-w-4xl h-[400px] md:h-[600px] rounded-3xl overflow-hidden shadow-kitty-glow" id="game-container">
+                <canvas id="game-board" class="w-full h-full"></canvas>
+            </div>
+
+            <div class="bg-white/70 backdrop-blur-sm p-4 rounded-2xl shadow-md w-full max-w-lg flex items-center justify-around space-x-4">
+                <p class="font-bold text-2xl text-kitty-red">Score: <span id="score" class="font-black">0</span></p>
+                <p class="font-bold text-2xl text-kitty-red">Time: <span id="timer" class="font-black">20.0</span>s</p>
+                <button id="start-button" class="px-6 py-3 bg-kitty-red text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-kitty-red/50">
+                    Start Game
+                </button>
+            </div>
+        </section>
+
+        <!-- 4. FINAL MESSAGE / CALL TO ACTION (Polished with Gradient) -->
+        <section class="h-auto py-20 px-4 flex flex-col items-center justify-center text-center bg-gradient-to-br from-kitty-pink to-kitty-red">
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-6 pb-2" style="text-shadow: 1px 1px 5px rgba(0,0,0,0.3);">
+                You're the Best Part of My Day.
+            </h2>
+            <p class="text-xl md:text-2xl text-white font-medium max-w-3xl mb-10 bg-black/20 p-6 rounded-2xl shadow-lg backdrop-blur-sm">
+                Happy Birthday again. I really hope you enjoyed this little tribute. I’m so thankful we’re still talking and looking forward to what comes next for us.
+            </p>
+            <a id="contact-button" href="https://www.instagram.com/hoda.uwu/" class="px-10 py-4 bg-white text-kitty-red font-extrabold text-2xl rounded-full shadow-kitty-glow transition-transform duration-300 transform hover:scale-110">
+                Message Me Now (Call Me?) 📞
+            </a>
+            <p class="mt-4 text-sm text-white/80">
+            </p>
+        </section>
+
+    </div>
+
+    <script>
+        // --- GSAP ANIMATIONS & INTERACTIVITY ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- ELEMENTS ---
+            const clickOverlay = document.getElementById('click-overlay');
+            const appContainer = document.getElementById('app-container');
+            const music = document.getElementById('bg-music');
+            const popperSound = document.getElementById('popper-sound');
+            const musicToggle = document.getElementById('music-toggle');
+            const soundOnIcon = document.getElementById('sound-on-icon');
+            const soundOffIcon = document.getElementById('sound-off-icon');
+            let hasInteracted = false;
+
+            // --- INITIALIZATION LOGIC ---
+            clickOverlay.addEventListener('click', () => {
+                if (hasInteracted) return;
+                hasInteracted = true;
+                
+                // 1. Fade out overlay
+                gsap.to(clickOverlay, {
+                    opacity: 0,
+                    duration: 0.7,
+                    onComplete: () => clickOverlay.style.display = 'none'
+                });
+
+                // 2. Fade in main content and music button
+                gsap.to(appContainer, { autoAlpha: 1, duration: 1, delay: 0.3 });
+                gsap.to(musicToggle, { autoAlpha: 1, duration: 1, delay: 0.5 });
+                
+                // 3. Play sounds
+                popperSound.currentTime = 0;
+                popperSound.play();
+                music.play().then(() => {
+                    soundOnIcon.classList.remove('hidden');
+                    soundOffIcon.classList.add('hidden');
+                }).catch(e => console.error("BG Music failed to play:", e));
+
+                // 4. Trigger confetti
+                confetti({
+                    particleCount: 250,
+                    spread: 120,
+                    origin: { y: 0.6 },
+                    colors: ['#FF85B2', '#FF69B4', '#FFFFFF'],
+                    scalar: 1.2
+                });
+
+                // 5. Start hero entrance animation
+                runHeroAnimation();
+
+            }, { once: true });
+
+
+            // --- MUSIC TOGGLE ---
+            musicToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (music.paused) {
+                    music.play();
+                    soundOnIcon.classList.remove('hidden');
+                    soundOffIcon.classList.add('hidden');
+                } else {
+                    music.pause();
+                    soundOnIcon.classList.add('hidden');
+                    soundOffIcon.classList.remove('hidden');
+                }
+            });
+
+            // --- ANIMATION FUNCTIONS ---
+            function runHeroAnimation() {
+                const heroChars = document.querySelectorAll('#hero-title span');
+                gsap.set(heroChars, { opacity: 0, scale: 0.5, y: 50 });
+                gsap.set('#hero-subtitle', { opacity: 0, y: 30 });
+                gsap.set('#hero-message', { opacity: 0, y: 30 });
+
+                gsap.timeline({ delay: 0.5 }) // Delay to sync with page fade-in
+                    .to(heroChars, { 
+                        opacity: 1, scale: 1, y: 0,
+                        duration: 0.8, stagger: 0.05, ease: "back.out(1.7)" 
+                    })
+                    .to('#hero-subtitle', { 
+                        opacity: 1, y: 0, duration: 0.6, ease: "power2.out" 
+                    }, "-=0.4")
+                    .to('#hero-message', {
+                        opacity: 1, y: 0, duration: 0.6, ease: "power2.out"
+                    }, "-=0.3");
+            }
+
+            // Memory Lane Scroll Animation
+            const track = document.getElementById("memory-track");
+            const cards = gsap.utils.toArray(".memory-card");
+            const memoryHeader = document.getElementById("memory-header");
+
+            if (track && cards.length > 0) {
+                gsap.to(track, {
+                    x: () => -(track.scrollWidth - window.innerWidth + 64),
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: "#memory-lane",
+                        pin: true, 
+                        scrub: 1,
+                        start: "top top",
+                        end: () => "+=" + (track.scrollWidth - window.innerWidth),
+                        invalidateOnRefresh: true,
+                    }
+                });
+                cards.forEach((card, i) => {
+                    gsap.fromTo(card, {
+                        scale: 0.9, opacity: 0.5, rotation: i % 2 === 0 ? 1 : -1,
+                    }, {
+                        scale: 1, opacity: 1, rotation: 0, ease: "power1.inOut",
+                        scrollTrigger: {
+                            trigger: card,
+                            containerAnimation: gsap.getTweensOf(track)[0],
+                            start: "left 80%",
+                            end: "center center",
+                            scrub: true,
+                        }
+                    });
+                });
+                gsap.to(memoryHeader, {
+                    opacity: 1, duration: 1,
+                    scrollTrigger: {
+                        trigger: "#memory-lane",
+                        start: "top center",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            }
+
+            // --- GAME LOGIC ---
+            const canvas = document.getElementById('game-board');
+            const ctx = canvas.getContext('2d');
+            const startButton = document.getElementById('start-button');
+            const scoreDisplay = document.getElementById('score');
+            const timerDisplay = document.getElementById('timer');
+            
+            let bows = [];
+            let score = 0;
+            let gameTime = 20;
+            let gameLoopInterval, bowSpawnInterval, timerInterval;
+            let isGameRunning = false;
+            const bowEmoji = '🎀', bowSize = 40;
+
+            function Bow(x, y, vy) { this.x = x; this.y = y; this.vy = vy; this.size = bowSize; }
+            Bow.prototype.draw = function() { ctx.font = `${this.size}px sans-serif`; ctx.fillText(bowEmoji, this.x - this.size / 2, this.y); };
+
+            function updateGame() {
+                if (!isGameRunning) return;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                bows = bows.filter(bow => {
+                    bow.y += bow.vy;
+                    bow.draw();
+                    return bow.y < canvas.height + bow.size; 
+                });
+            }
+
+            function spawnBow() {
+                if (!isGameRunning) return;
+                const x = Math.random() * (canvas.width - bowSize) + bowSize / 2;
+                const vy = 1 + Math.random() * 2;
+                bows.push(new Bow(x, -bowSize, vy));
+            }
+
+            function handleHit(event) {
+                if (!isGameRunning) return;
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const clickX = (event.clientX - rect.left) * scaleX;
+                const clickY = (event.clientY - rect.top) * scaleY;
+
+                const hitIndex = bows.findIndex(bow => 
+                    clickX > bow.x - bow.size / 2 && clickX < bow.x + bow.size / 2 &&
+                    clickY > bow.y - bow.size && clickY < bow.y
+                );
+
+                if (hitIndex !== -1) {
+                    score++;
+                    scoreDisplay.textContent = score;
+                    bows.splice(hitIndex, 1);
+                    gsap.fromTo(scoreDisplay, { scale: 1.5, color: '#FF0000' }, { scale: 1, color: '#FF69B4', duration: 0.3, ease: 'back.out(2)' });
+                }
+            }
+            
+            function startGame() {
+                if (isGameRunning) return;
+                score = 0; gameTime = 20; bows = [];
+                scoreDisplay.textContent = score;
+                timerDisplay.textContent = gameTime.toFixed(1);
+                isGameRunning = true;
+                startButton.textContent = "Playing...";
+                startButton.disabled = true;
+
+                gameLoopInterval = setInterval(updateGame, 1000 / 60);
+                bowSpawnInterval = setInterval(spawnBow, 700);
+
+                let startTime = Date.now();
+                timerInterval = setInterval(() => {
+                    let elapsed = (Date.now() - startTime) / 1000;
+                    gameTime = Math.max(0, 20 - elapsed);
+                    timerDisplay.textContent = gameTime.toFixed(1);
+                    if (gameTime <= 0) endGame();
+                }, 100);
+            }
+
+            function endGame() {
+                clearInterval(gameLoopInterval); clearInterval(bowSpawnInterval); clearInterval(timerInterval);
+                isGameRunning = false;
+                startButton.textContent = "Restart";
+                startButton.disabled = false;
+                const message = `🎉 Time's up! You scored ${score} bows! You get ${score} kissies from me :3.jk u get unlimited kissies`;
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4';
+                modal.innerHTML = `
+                    <div class="bg-kitty-white p-8 rounded-3xl shadow-kitty-glow text-center transform scale-0" id="game-modal">
+                        <p class="text-3xl font-black text-kitty-red mb-4">Game Over!</p>
+                        <p class="text-xl text-gray-800">${message}</p>
+                        <button class="mt-6 px-6 py-3 bg-kitty-red text-white rounded-full hover:bg-pink-700 font-bold" onclick="this.closest('.fixed').remove()">
+                            yay!
+                        </button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                gsap.to('#game-modal', { scale: 1, duration: 0.5, ease: 'back.out(1.7)' });
+            }
+
+            startButton.addEventListener('click', startGame);
+            canvas.addEventListener('click', handleHit);
+
+            function resizeCanvas() {
+                const container = document.getElementById('game-container');
+                if (container) {
+                    canvas.width = container.clientWidth;
+                    canvas.height = container.clientHeight;
+                }
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas(); 
+            updateGame(); 
+        });
+    </script>
+</body>
+</html>
+
