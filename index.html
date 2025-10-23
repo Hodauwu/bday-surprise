@@ -91,10 +91,17 @@
             display: flex;
         }
         .memory-card {
-            width: calc(100vw - 4rem); /* Full viewport width minus padding/margin */
+            width: calc(100vw - 3rem); /* Slightly smaller margin on mobile */
             flex-shrink: 0;
-            padding: 2rem;
+            padding: 1.5rem;
         }
+        @media (min-width: 768px) { /* md breakpoint */
+            .memory-card {
+                width: calc(100vw - 4rem);
+                padding: 2rem;
+            }
+        }
+
         /* Game Styling */
         #game-board {
             cursor: pointer;
@@ -108,10 +115,11 @@
 
 <body>
     <!-- Click to Enter Overlay -->
-    <div id="click-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-kitty-bg cursor-pointer transition-opacity duration-500">
+    <div id="click-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-kitty-bg cursor-pointer transition-opacity duration-500 p-4">
         <div class="text-center animate-pulse">
-            <h1 class="text-4xl font-bold text-kitty-red">A little surprise for you...</h1>
-            <p class="text-2xl mt-2 text-gray-500">(Click anywhere to open)</p>
+            <!-- Mobile friendly text size -->
+            <h1 class="text-3xl md:text-4xl font-bold text-kitty-red">A little surprise for you...</h1>
+            <p class="text-xl md:text-2xl mt-2 text-gray-500">(Click anywhere to open)</p>
             <p class="text-6xl mt-4">🎀</p>
         </div>
     </div>
@@ -142,63 +150,70 @@
 
         <!-- 1. HERO SECTION (Polished with Gradient) -->
         <section id="hero" class="h-screen flex items-center justify-center text-center p-4 bg-gradient-to-br from-kitty-pink to-kitty-red">
-            <div class="space-y-6">
-                <div class="text-7xl md:text-9xl font-black text-white tracking-widest p-4 rounded-3xl bg-white/20 backdrop-blur-sm" id="hero-title" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.2);">
+            <div class="space-y-6 w-full">
+                <!-- Mobile friendly text size -->
+                <div class="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-widest p-4 rounded-3xl bg-white/20 backdrop-blur-sm" id="hero-title" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.2);">
                     <span class="inline-block" data-char="H">H</span>
                     <span class="inline-block" data-char="A">A</span>
                     <span class="inline-block" data-char="P">P</span>
                     <span class="inline-block" data-char="P">P</span>
                     <span class="inline-block" data-char="Y">Y</span>
                 </div>
-                <div class="text-4xl md:text-6xl font-bold text-kitty-red shadow-lg p-3 rounded-xl bg-kitty-white" id="hero-subtitle">
+                <!-- Mobile friendly text size -->
+                <div class="text-3xl md:text-6xl font-bold text-kitty-red shadow-lg p-3 rounded-xl bg-kitty-white" id="hero-subtitle">
                     Birthday Anshika :3 🎂
                 </div>
-                <p class="text-xl text-white font-semibold opacity-0 bg-black/20 p-3 rounded-lg mx-auto max-w-md" id="hero-message">
+                <p class="text-lg md:text-xl text-white font-semibold opacity-0 bg-black/20 p-3 rounded-lg mx-auto max-w-md" id="hero-message">
                     I made this to remind you the beautiful time and love we had and shared over the years. Scroll to see some of our memories.
                 </p>
             </div>
-            <!-- Decorative Bows -->
-            <div class="kitty-bow absolute top-10 left-10 transform -rotate-12"></div>
-            <div class="kitty-bow absolute bottom-10 right-10 transform rotate-45 small"></div>
+            <!-- Decorative Bows (Hidden on small screens) -->
+            <div class="kitty-bow absolute top-10 left-10 transform -rotate-12 hidden md:block"></div>
+            <div class="kitty-bow absolute bottom-10 right-10 transform rotate-45 small hidden md:block"></div>
         </section>
 
         <!-- 2. MEMORY LANE (GSAP Scroll-Pinning Horizontal Scroll) -->
         <section id="memory-lane" class="relative">
             <div class="sticky top-0 h-screen overflow-hidden flex items-center justify-start p-2 md:p-8">
-                <h2 class="absolute top-8 left-1/2 transform -translate-x-1/2 text-4xl font-black text-kitty-red z-30 opacity-0 bg-white/50 p-2 rounded-lg" id="memory-header">
+                <!-- Mobile friendly text size -->
+                <h2 class="absolute top-6 left-1/2 transform -translate-x-1/2 text-2xl md:text-4xl font-black text-kitty-red z-30 opacity-0 bg-white/50 p-2 rounded-lg" id="memory-header">
                     Our Digital Memory Lane :3
                 </h2>
-                <div class="memory-track p-4 md:p-8 space-x-8" id="memory-track">
+                <div class="memory-track p-4 md:p-8 space-x-4 md:space-x-8" id="memory-track">
                     
-                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-pink/90 rounded-3xl shadow-kitty-subtle border border-white p-6 md:p-10 transform scale-90" data-index="0">
-                        <img src="images/1.jpeg" alt="Memory 1" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Memory+Image+1'">
-                        <div class="text-left md:w-2/3">
-                            <h3 class="text-3xl font-bold text-white mb-2" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">Chapter 1: The First pic u sent me</h3>
-                            <p class="text-white text-lg font-medium">Remember that first late-night call where you asked me to yap about cars and we were so awkward in call back then. Look at us now..</p>
+                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-pink/90 rounded-3xl shadow-kitty-subtle border border-white p-4 md:p-10 transform scale-90" data-index="0">
+                        <img src="images/1.jpeg" alt="Memory 1" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Image+1+Not+Found'">
+                        <div class="text-left w-full md:w-2/3">
+                            <!-- Mobile friendly text size -->
+                            <h3 class="text-2xl md:text-3xl font-bold text-white mb-2" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">Chapter 1: The First pic u sent me</h3>
+                            <p class="text-white text-base md:text-lg font-medium">Remember that first late-night call where you asked me to yap about cars and we were so awkward in call back then. Look at us now..</p>
                         </div>
                     </div>
                     
-                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-white rounded-3xl shadow-kitty-subtle border p-6 md:p-10 transform scale-90" data-index="1">
-                         <img src="images/3.jpeg" alt="Memory 2" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FF69B4/FFC0CB?text=Memory+Image+2'">
-                        <div class="text-left md:w-2/3">
-                            <h3 class="text-3xl font-bold text-kitty-red mb-2">The Art Master & The Queen</h3>
-                            <p class="text-gray-700 text-lg">Our first art. All those hours we spent drawing and making cute art together and the games we played! I miss playing games and watching movies with you :(</p>
+                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-white rounded-3xl shadow-kitty-subtle border p-4 md:p-10 transform scale-90" data-index="1">
+                         <img src="images/3.jpeg" alt="Memory 2" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FF69B4/FFC0CB?text=Image+2+Not+Found'">
+                         <div class="text-left w-full md:w-2/3">
+                            <!-- Mobile friendly text size -->
+                            <h3 class="text-2xl md:text-3xl font-bold text-kitty-red mb-2">The Art Master & The Queen</h3>
+                            <p class="text-gray-700 text-base md:text-lg">Our first art. All those hours we spent drawing and making cute art together and the games we played! I miss playing games and watching movies with you :(</p>
                         </div>
                     </div>
                     
-                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-pink/90 rounded-3xl shadow-kitty-subtle border border-white p-6 md:p-10 transform scale-90" data-index="2">
-                         <img src="images/4.jpeg" alt="Memory 3" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Memory+Image+3'">
-                        <div class="text-left md:w-2/3">
-                            <h3 class="text-3xl font-bold text-white mb-2" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">The Day I Finally Saw my baby :3</h3>
-                            <p class="text-white text-lg font-medium">This day will always be my favorite day in my whole life forever. I want to relive this day forever with youuu. My fav pic<3</p>
+                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-pink/90 rounded-3xl shadow-kitty-subtle border border-white p-4 md:p-10 transform scale-90" data-index="2">
+                         <img src="images/4.jpeg" alt="Memory 3" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Image+3+Not+Found'">
+                         <div class="text-left w-full md:w-2/3">
+                            <!-- Mobile friendly text size -->
+                            <h3 class="text-2xl md:text-3xl font-bold text-white mb-2" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">The Day I Finally Saw my baby :3</h3>
+                            <p class="text-white text-base md:text-lg font-medium">This day will always be my favorite day in my whole life forever. I want to relive this day forever with youuu. My fav pic<3</p>
                         </div>
                     </div>
 
-                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-white rounded-3xl shadow-kitty-subtle border p-6 md:p-10 transform scale-90" data-index="3">
-                         <img src="https://placehold.co/300x450/FF69B4/FFC0CB?text=Future+Memory" alt="Memory 4" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FF69B4/FFC0CB?text=Memory+Image+4'">
-                        <div class="text-left md:w-2/3">
-                            <h3 class="text-3xl font-bold text-kitty-red mb-2">I love you</h3>
-                            <p class="text-gray-700 text-lg">I’m excited about our future, whatever it may be. All I know is that having you to talk to every day makes everything better. Happy Birthday anshu i love you! Now, try the game!</p>
+                    <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-white rounded-3xl shadow-kitty-subtle border p-4 md:p-10 transform scale-90" data-index="3">
+                         <img src="https://placehold.co/300x450/FF69B4/FFC0CB?text=Future+Memory" alt="Memory 4" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" >
+                         <div class="text-left w-full md:w-2/3">
+                            <!-- Mobile friendly text size -->
+                            <h3 class="text-2xl md:text-3xl font-bold text-kitty-red mb-2">I love you</h3>
+                            <p class="text-gray-700 text-base md:text-lg">I’m excited about our future, whatever it may be. All I know is that having you to talk to every day makes everything better. Happy Birthday anshu i love you! Now, try the game!</p>
                         </div>
                     </div>
                 </div>
@@ -208,22 +223,25 @@
         <!-- 3. INTERACTIVE GAME SECTION (Polished) -->
         <section id="game-section" class="min-h-screen flex flex-col items-center justify-center p-4 py-16 bg-kitty-bg space-y-6">
             <div class="text-center">
-                <h2 class="text-5xl font-black text-kitty-red mb-2">
+                <!-- Mobile friendly text size -->
+                <h2 class="text-4xl md:text-5xl font-black text-kitty-red mb-2">
                     Birthday Game Time! 🎀
                 </h2>
-                <p class="text-xl text-gray-600 max-w-xl">
+                <p class="text-lg md:text-xl text-gray-600 max-w-xl">
                     How quickly can you tap the falling bows? Every hit is a wish for your amazing birthday!
                 </p>
             </div>
 
+            <!-- Set a max-height on mobile for the game -->
             <div class="w-full max-w-4xl h-[400px] md:h-[600px] rounded-3xl overflow-hidden shadow-kitty-glow" id="game-container">
                 <canvas id="game-board" class="w-full h-full"></canvas>
             </div>
 
-            <div class="bg-white/70 backdrop-blur-sm p-4 rounded-2xl shadow-md w-full max-w-lg flex items-center justify-around space-x-4">
-                <p class="font-bold text-2xl text-kitty-red">Score: <span id="score" class="font-black">0</span></p>
-                <p class="font-bold text-2xl text-kitty-red">Time: <span id="timer" class="font-black">20.0</span>s</p>
-                <button id="start-button" class="px-6 py-3 bg-kitty-red text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-kitty-red/50">
+            <!-- Mobile friendly controls: stack on small screens -->
+            <div class="bg-white/70 backdrop-blur-sm p-4 rounded-2xl shadow-md w-full max-w-lg flex flex-col sm:flex-row items-center justify-around space-y-3 sm:space-y-0 sm:space-x-4">
+                <p class="font-bold text-xl md:text-2xl text-kitty-red">Score: <span id="score" class="font-black">0</span></p>
+                <p class="font-bold text-xl md:text-2xl text-kitty-red">Time: <span id="timer" class="font-black">20.0</span>s</p>
+                <button id="start-button" class="px-6 py-3 bg-kitty-red text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-kitty-red/50 w-full sm:w-auto">
                     Start Game
                 </button>
             </div>
@@ -231,13 +249,14 @@
 
         <!-- 4. FINAL MESSAGE / CALL TO ACTION (Polished with Gradient) -->
         <section class="h-auto py-20 px-4 flex flex-col items-center justify-center text-center bg-gradient-to-br from-kitty-pink to-kitty-red">
-            <h2 class="text-4xl md:text-5xl font-black text-white mb-6 pb-2" style="text-shadow: 1px 1px 5px rgba(0,0,0,0.3);">
+            <!-- Mobile friendly text size -->
+            <h2 class="text-3xl md:text-5xl font-black text-white mb-6 pb-2" style="text-shadow: 1px 1px 5px rgba(0,0,0,0.3);">
                 You're the Best Part of My Day.
             </h2>
-            <p class="text-xl md:text-2xl text-white font-medium max-w-3xl mb-10 bg-black/20 p-6 rounded-2xl shadow-lg backdrop-blur-sm">
+            <p class="text-lg md:text-2xl text-white font-medium max-w-3xl mb-10 bg-black/20 p-6 rounded-2xl shadow-lg backdrop-blur-sm">
                 Happy Birthday again. I really hope you enjoyed this little tribute. I’m so thankful we’re still talking and looking forward to what comes next for us.
             </p>
-            <a id="contact-button" href="https://www.instagram.com/hoda.uwu/" class="px-10 py-4 bg-white text-kitty-red font-extrabold text-2xl rounded-full shadow-kitty-glow transition-transform duration-300 transform hover:scale-110">
+            <a id="contact-button" href="https://www.instagram.com/hoda.uwu/" class="px-8 md:px-10 py-3 md:py-4 bg-white text-kitty-red font-extrabold text-xl md:text-2xl rounded-full shadow-kitty-glow transition-transform duration-300 transform hover:scale-110">
                 Message Me Now (Call Me?) 📞
             </a>
             <p class="mt-4 text-sm text-white/80">
@@ -341,8 +360,11 @@
             const memoryHeader = document.getElementById("memory-header");
 
             if (track && cards.length > 0) {
+                // Determine horizontal scroll distance
+                let scrollDistance = () => track.scrollWidth - window.innerWidth + (window.innerWidth > 768 ? 64 : 32); // 64 for md:p-8, 32 for p-4
+
                 gsap.to(track, {
-                    x: () => -(track.scrollWidth - window.innerWidth + 64),
+                    x: () => -scrollDistance(),
                     ease: "none",
                     scrollTrigger: {
                         trigger: "#memory-lane",
@@ -353,6 +375,7 @@
                         invalidateOnRefresh: true,
                     }
                 });
+
                 cards.forEach((card, i) => {
                     gsap.fromTo(card, {
                         scale: 0.9, opacity: 0.5, rotation: i % 2 === 0 ? 1 : -1,
@@ -411,13 +434,25 @@
                 bows.push(new Bow(x, -bowSize, vy));
             }
 
-            function handleHit(event) {
+            // Handle both touch and mouse clicks for mobile
+            function handleInteraction(event) {
                 if (!isGameRunning) return;
+                
+                // Get coordinates
+                let clientX, clientY;
+                if (event.touches) {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
                 const rect = canvas.getBoundingClientRect();
                 const scaleX = canvas.width / rect.width;
                 const scaleY = canvas.height / rect.height;
-                const clickX = (event.clientX - rect.left) * scaleX;
-                const clickY = (event.clientY - rect.top) * scaleY;
+                const clickX = (clientX - rect.left) * scaleX;
+                const clickY = (clientY - rect.top) * scaleY;
 
                 const hitIndex = bows.findIndex(bow => 
                     clickX > bow.x - bow.size / 2 && clickX < bow.x + bow.size / 2 &&
@@ -475,7 +510,8 @@
             }
 
             startButton.addEventListener('click', startGame);
-            canvas.addEventListener('click', handleHit);
+            canvas.addEventListener('click', handleInteraction);
+            canvas.addEventListener('touchstart', handleInteraction, { passive: true }); // Add touch support
 
             function resizeCanvas() {
                 const container = document.getElementById('game-container');
