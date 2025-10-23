@@ -79,7 +79,7 @@
             width: 30px;
             height: 18px;
         }
-        .kitty-bow.small::before, .kitty-bow::after {
+        .kitty-bow.small::before, .kitty-bow.small::after {
             width: 18px;
             height: 18px;
         }
@@ -89,19 +89,16 @@
         /* Custom ScrollTrigger Styling */
         .memory-track {
             display: flex;
-            align-items: center; /* Vertically center the cards in the track */
         }
         .memory-card {
             width: calc(100vw - 3rem); /* Slightly smaller margin on mobile */
             flex-shrink: 0;
             padding: 1.5rem;
-            max-width: 900px; /* Add a max-width for very large screens */
-            margin: auto; /* Center the card horizontally if track is wider */
         }
         @media (min-width: 768px) { /* md breakpoint */
             .memory-card {
-                width: calc(100vw - 8rem); /* More padding on desktop */
-                padding: 2.5rem;
+                width: calc(100vw - 4rem);
+                padding: 2rem;
             }
         }
 
@@ -176,20 +173,17 @@
         </section>
 
         <!-- 2. MEMORY LANE (GSAP Scroll-Pinning Horizontal Scroll) -->
-        <!-- *** THE FIX: Removed h-screen from the sticky container *** -->
-        <section id="memory-lane" class="relative py-16 md:py-24">
-            <!-- This container is now shorter, letting the card define the height -->
-            <div class="sticky top-0 overflow-hidden flex items-center justify-start p-2 md:p-8">
+        <section id="memory-lane" class="relative">
+            <div class="sticky top-0 h-screen overflow-hidden flex items-center justify-start p-2 md:p-8">
                 <!-- Mobile friendly text size -->
-                <h2 class="absolute top-0 md:top-6 left-1/2 transform -translate-x-1/2 text-2xl md:text-4xl font-black text-kitty-red z-30 opacity-0 bg-white/50 p-2 rounded-lg" id="memory-header">
+                <h2 class="absolute top-6 left-1/2 transform -translate-x-1/2 text-2xl md:text-4xl font-black text-kitty-red z-30 opacity-0 bg-white/50 p-2 rounded-lg" id="memory-header">
                     Our Digital Memory Lane :3
                 </h2>
                 <div class="memory-track p-4 md:p-8 space-x-4 md:space-x-8" id="memory-track">
                     
                     <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-pink/90 rounded-3xl shadow-kitty-subtle border border-white p-4 md:p-10 transform scale-90" data-index="0">
-                        <!-- *** THE FIX: Constrained image height *** -->
-                        <img src="images/1.jpeg" alt="Memory 1" class="w-full md:w-1/2 lg:w-1/3 h-auto max-h-[60vh] rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Image+1+Not+Found'">
-                        <div class="text-left w-full md:w-1/2 lg:w-2/3">
+                        <img src="images/1.jpeg" alt="Memory 1" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Image+1+Not+Found'">
+                        <div class="text-left w-full md:w-2/3">
                             <!-- Mobile friendly text size -->
                             <h3 class="text-2xl md:text-3xl font-bold text-white mb-2" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">Chapter 1: The First pic u sent me</h3>
                             <p class="text-white text-base md:text-lg font-medium">Remember that first late-night call where you asked me to yap about cars and we were so awkward in call back then. Look at us now..</p>
@@ -197,9 +191,8 @@
                     </div>
                     
                     <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-white rounded-3xl shadow-kitty-subtle border p-4 md:p-10 transform scale-90" data-index="1">
-                         <!-- *** THE FIX: Constrained image height *** -->
-                         <img src="images/3.jpeg" alt="Memory 2" class="w-full md:w-1/2 lg:w-1/3 h-auto max-h-[60vh] rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FF69B4/FFC0CB?text=Image+2+Not+Found'">
-                         <div class="text-left w-full md:w-1/2 lg:w-2/3">
+                         <img src="images/3.jpeg" alt="Memory 2" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FF69B4/FFC0CB?text=Image+2+Not+Found'">
+                         <div class="text-left w-full md:w-2/3">
                             <!-- Mobile friendly text size -->
                             <h3 class="text-2xl md:text-3xl font-bold text-kitty-red mb-2">The Art Master & The Queen</h3>
                             <p class="text-gray-700 text-base md:text-lg">Our first art. All those hours we spent drawing and making cute art together and the games we played! I miss playing games and watching movies with you :(</p>
@@ -207,9 +200,8 @@
                     </div>
                     
                     <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-pink/90 rounded-3xl shadow-kitty-subtle border border-white p-4 md:p-10 transform scale-90" data-index="2">
-                         <!-- *** THE FIX: Constrained image height *** -->
-                         <img src="images/4.jpeg" alt="Memory 3" class="w-full md:w-1/2 lg:w-1/3 h-auto max-h-[60vh] rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Image+3+Not+Found'">
-                         <div class="text-left w-full md:w-1/2 lg:w-2/3">
+                         <img src="images/4.jpeg" alt="Memory 3" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" onerror="this.src='https://placehold.co/300x450/FFC0CB/FF69B4?text=Image+3+Not+Found'">
+                         <div class="text-left w-full md:w-2/3">
                             <!-- Mobile friendly text size -->
                             <h3 class="text-2xl md:text-3xl font-bold text-white mb-2" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">The Day I Finally Saw my baby :3</h3>
                             <p class="text-white text-base md:text-lg font-medium">This day will always be my favorite day in my whole life forever. I want to relive this day forever with youuu. My fav pic<3</p>
@@ -217,9 +209,8 @@
                     </div>
 
                     <div class="memory-card flex flex-col md:flex-row items-center justify-center bg-kitty-white rounded-3xl shadow-kitty-subtle border p-4 md:p-10 transform scale-90" data-index="3">
-                         <!-- *** THE FIX: Constrained image height *** -->
-                         <img src="httpsD://placehold.co/300x450/FF69B4/FFC0CB?text=Future+Memory" alt="Memory 4" class="w-full md:w-1/2 lg:w-1/3 h-auto max-h-[60vh] rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" >
-                         <div class="text-left w-full md:w-1/2 lg:w-2/3">
+                         <img src="https://placehold.co/300x450/FF69B4/FFC0CB?text=Future+Memory" alt="Memory 4" class="w-full md:w-1/3 h-auto rounded-xl object-cover mb-4 md:mb-0 md:mr-8 transition duration-300 hover:scale-105 shadow-lg" >
+                         <div class="text-left w-full md:w-2/3">
                             <!-- Mobile friendly text size -->
                             <h3 class="text-2xl md:text-3xl font-bold text-kitty-red mb-2">I love you</h3>
                             <p class="text-gray-700 text-base md:text-lg">I’m excited about our future, whatever it may be. All I know is that having you to talk to every day makes everything better. Happy Birthday anshu i love you! Now, try the game!</p>
@@ -278,8 +269,8 @@
         // --- GSAP ANIMATIONS & INTERACTIVITY ---
         gsap.registerPlugin(ScrollTrigger);
 
-        // Wait for the *entire window* (images, fonts, etc.) to load before running animations
-        window.addEventListener('load', () => {
+        // *** Reverted back to DOMContentLoaded ***
+        document.addEventListener('DOMContentLoaded', () => {
 
             // --- ELEMENTS ---
             const clickOverlay = document.getElementById('click-overlay');
@@ -371,10 +362,10 @@
 
             if (track && cards.length > 0) {
                 // Determine horizontal scroll distance
-                let scrollDistance = () => track.scrollWidth - window.innerWidth;
+                let scrollDistance = () => track.scrollWidth - window.innerWidth + (window.innerWidth > 768 ? 64 : 32); // 64 for md:p-8, 32 for p-4
 
                 gsap.to(track, {
-                    x: () => -scrollDistance() - (window.innerWidth > 768 ? 64 : 32), // Add padding offset
+                    x: () => -scrollDistance(),
                     ease: "none",
                     scrollTrigger: {
                         trigger: "#memory-lane",
@@ -404,7 +395,7 @@
                     opacity: 1, duration: 1,
                     scrollTrigger: {
                         trigger: "#memory-lane",
-                        start: "top 40%", // Trigger when section is 40% from top
+                        start: "top center",
                         toggleActions: "play none none reverse"
                     }
                 });
@@ -451,7 +442,6 @@
                 // Get coordinates
                 let clientX, clientY;
                 if (event.touches) {
-                    if (event.touches.length === 0) return;
                     clientX = event.touches[0].clientX;
                     clientY = event.touches[0].clientY;
                 } else {
@@ -527,17 +517,14 @@
             function resizeCanvas() {
                 const container = document.getElementById('game-container');
                 if (container) {
-                    // Ensure canvas is resized based on its *actual* on-screen client dimensions
                     canvas.width = container.clientWidth;
                     canvas.height = container.clientHeight;
                 }
             }
             window.addEventListener('resize', resizeCanvas);
-            
-            // Run resizeCanvas right away to set initial size
             resizeCanvas(); 
             updateGame(); 
-        }); // <-- This now correctly closes the window.addEventListener('load', ...)
+        }); // <-- This now correctly closes the document.addEventListener('DOMContentLoaded', ...)
     </script>
 </body>
 </html>
